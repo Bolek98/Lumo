@@ -4,7 +4,7 @@
 <p align="center">Vlastní „Dynamic Island“ pro Windows 10 a 11 · od <b>Bolek98</b> [B98]</p>
 
 <p align="center">
-  <a href="https://github.com/Bolek98/Lumo/releases/latest"><b>⬇ Stáhnout instalátor</b></a> ·
+  <a href="https://github.com/Bolek98/Lumo/raw/main/download/Lumo-Setup.exe"><b>⬇ Stáhnout instalátor (verze 4.0)</b></a> ·
   <a href="https://bolek98.github.io/#programy">Bolkova dílna</a>
 </p>
 
@@ -48,7 +48,7 @@ když hraje hudba, má obal alba a ekvalizér. Po najetí myší se rozbalí do 
 
 ## Instalace
 
-1. Stáhni **Lumo-Setup.exe** z [Releases](https://github.com/Bolek98/Lumo/releases/latest)
+1. Stáhni **[Lumo-Setup.exe](https://github.com/Bolek98/Lumo/raw/main/download/Lumo-Setup.exe)** (verze 4.0)
 2. Spusť ho. Práva správce nejsou potřeba, instaluje se do `%LOCALAPPDATA%\Programs\Lumo`
 3. Když Windows ukáže modré okno SmartScreen, klikni na **Další informace → Přesto spustit**
    (instalátor není digitálně podepsaný)
