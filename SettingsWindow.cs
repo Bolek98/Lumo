@@ -139,7 +139,7 @@ namespace Lumo
             Toggle("Schovat ve hrách přes celou obrazovku", _s.HideInFullscreen, v => _win.SetHideInFullscreen(v));
             Toggle("Ukázat novou skladbu", _s.PopOnNewTrack, v => _win.SetPopOnNewTrack(v));
 
-            if (!HardwareService.IsAdmin)
+            if (!HardwareService.IsAdmin && !Packaging.IsPackaged)
             {
                 Label("Teplota CPU");
                 ButtonRow(("Spustit jako správce", () => _win.RestartAsAdmin()));

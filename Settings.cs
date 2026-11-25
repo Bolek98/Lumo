@@ -74,6 +74,7 @@ namespace Lumo
                     }
                     Log.Write("Data převedena z Ostrůvku.");
                 }
+                if (Packaging.IsPackaged) return;
                 using var key = Registry.CurrentUser.CreateSubKey(RunKey);
                 if (key.GetValue("Ostrovek") is string)
                 {
@@ -124,11 +125,13 @@ namespace Lumo
         {
             get
             {
+                if (Packaging.IsPackaged) return Packaging.StartupEnabled;
                 using var key = Registry.CurrentUser.OpenSubKey(RunKey);
                 return key?.GetValue(RunName) is string;
             }
             set
             {
+                if (Packaging.IsPackaged) { Packaging.StartupEnabled = value; return; }
                 using var key = Registry.CurrentUser.CreateSubKey(RunKey);
                 if (value)
                     key.SetValue(RunName, "\"" + Environment.ProcessPath + "\"");

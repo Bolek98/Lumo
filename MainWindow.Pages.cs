@@ -165,7 +165,7 @@ namespace Lumo
             }
             else
             {
-                CpuSub.Text = HardwareService.IsAdmin ? "Teplota: chybí PawnIO" : "Teplota: jako správce";
+                CpuSub.Text = Packaging.IsPackaged ? cpuLoad : HardwareService.IsAdmin ? "Teplota: chybí PawnIO" : "Teplota: jako správce";
                 CpuSub.ToolTip = HardwareService.IsAdmin
                     ? "Pro teplotu CPU nainstaluj ovladač PawnIO (pawnio.eu) a restartuj Lumo."
                     : "Pro teplotu CPU: pravé tlačítko na Lumo → Spustit jako správce.\nPotřeba je i ovladač PawnIO (pawnio.eu).";

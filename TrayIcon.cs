@@ -67,7 +67,7 @@ namespace Lumo
             items.Add(Item("Schovat ve hrách přes celou obrazovku", s.HideInFullscreen, () => _win.SetHideInFullscreen(!s.HideInFullscreen)));
             items.Add(Item("Ukázat novou skladbu", s.PopOnNewTrack, () => _win.SetPopOnNewTrack(!s.PopOnNewTrack)));
             items.Add(Item("Spouštět s Windows", Settings.StartWithWindows, () => Settings.StartWithWindows = !Settings.StartWithWindows));
-            if (!HardwareService.IsAdmin)
+            if (!HardwareService.IsAdmin && !Packaging.IsPackaged)
                 items.Add(Item("Spustit jako správce (teplota CPU)", false, () => _win.RestartAsAdmin()));
             items.Add(new WF.ToolStripSeparator());
             items.Add(Item("Ukončit", false, () => System.Windows.Application.Current.Shutdown()));

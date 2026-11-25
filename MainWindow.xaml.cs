@@ -634,7 +634,7 @@ namespace Lumo
             m.Items.Add(Item("Schovat ve hrách přes celou obrazovku", _s.HideInFullscreen, () => SetHideInFullscreen(!_s.HideInFullscreen)));
             m.Items.Add(Item("Ukázat novou skladbu", _s.PopOnNewTrack, () => SetPopOnNewTrack(!_s.PopOnNewTrack)));
             m.Items.Add(Item("Spouštět s Windows", Settings.StartWithWindows, () => Settings.StartWithWindows = !Settings.StartWithWindows));
-            if (!HardwareService.IsAdmin)
+            if (!HardwareService.IsAdmin && !Packaging.IsPackaged)
             {
                 var admin = new MenuItem { Header = "Spustit jako správce (teplota CPU)" };
                 admin.Click += (_, _) => RestartAsAdmin();

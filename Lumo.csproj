@@ -12,7 +12,7 @@
     <AssemblyName>Lumo</AssemblyName>
     <RootNamespace>Lumo</RootNamespace>
     <ApplicationIcon>lumo.ico</ApplicationIcon>
-    <Version>4.0.0</Version>
+    <Version>4.1.0</Version>
     <Product>Lumo</Product>
     <Authors>Bolek98</Authors>
 
