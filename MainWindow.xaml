@@ -1,0 +1,325 @@
+<Window x:Class="Lumo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Lumo"
+        Width="560" Height="260"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ShowInTaskbar="False" ResizeMode="NoResize" ShowActivated="False"
+        FontFamily="Segoe UI Variable Text, Segoe UI"
+        UseLayoutRounding="True"
+        TextOptions.TextFormattingMode="Display">
+    <Grid x:Name="Root">
+        <!-- barevná záře za ostrůvkem (barva z obalu alba) -->
+        <Border x:Name="Glow"
+                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10"
+                Width="{Binding ActualWidth, ElementName=Island}"
+                Height="{Binding ActualHeight, ElementName=Island}"
+                CornerRadius="{Binding CornerRadius, ElementName=Island}"
+                Opacity="0.45" IsHitTestVisible="False">
+            <Border.Effect>
+                <BlurEffect Radius="22"/>
+            </Border.Effect>
+        </Border>
+
+        <Border x:Name="Island" AllowDrop="True"
+                HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,10,0,10"
+                Width="120" Height="36" CornerRadius="18"
+                Background="#F5050507" BorderThickness="1"
+                ClipToBounds="True" Cursor="Arrow">
+            <Grid>
+                <!-- ===== MALÝ OSTRŮVEK ===== -->
+                <Grid x:Name="CompactView" Height="34" VerticalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border x:Name="CompactArt" Grid.Column="0" Width="22" Height="22" CornerRadius="6"
+                            Margin="7,0,6,0" VerticalAlignment="Center" Visibility="Collapsed"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="CompactIcon" FontFamily="Segoe Fluent Icons, Segoe MDL2 Assets"
+                                   FontSize="12" Foreground="White" VerticalAlignment="Center"
+                                   Margin="0,1,6,0" Visibility="Collapsed"/>
+                        <TextBlock x:Name="CompactText" Text="00:00" Foreground="White"
+                                   FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="CompactWeather" Foreground="#CCFFFFFF" FontSize="13" Margin="10,0,0,0"
+                                   FontFamily="Segoe UI Emoji, Segoe UI Symbol, Segoe UI" VerticalAlignment="Center"
+                                   Visibility="Collapsed"/>
+                    </StackPanel>
+
+                    <StackPanel x:Name="Bars" Grid.Column="2" Orientation="Horizontal"
+                                Margin="6,0,12,0" VerticalAlignment="Center" Visibility="Collapsed">
+                        <Rectangle Width="3" Height="14" RadiusX="1.5" RadiusY="1.5" Margin="1,0" RenderTransformOrigin="0.5,0.5"/>
+                        <Rectangle Width="3" Height="14" RadiusX="1.5" RadiusY="1.5" Margin="1,0" RenderTransformOrigin="0.5,0.5"/>
+                        <Rectangle Width="3" Height="14" RadiusX="1.5" RadiusY="1.5" Margin="1,0" RenderTransformOrigin="0.5,0.5"/>
+                        <Rectangle Width="3" Height="14" RadiusX="1.5" RadiusY="1.5" Margin="1,0" RenderTransformOrigin="0.5,0.5"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- ===== ROZBALENÝ OSTRŮVEK (záložky) ===== -->
+                <Grid x:Name="ExpandedView" Margin="16,14,16,6" Visibility="Collapsed" Opacity="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0">
+                        <!-- HUDBA -->
+                        <Grid x:Name="PageMedia" Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Border x:Name="BigArt" Width="64" Height="64" CornerRadius="14" Background="#22FFFFFF"/>
+                                <StackPanel Grid.Column="1" Margin="12,2,8,0" VerticalAlignment="Center">
+                                    <TextBlock x:Name="TitleText" Foreground="White" FontSize="15" FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock x:Name="ArtistText" Foreground="#B3FFFFFF" FontSize="12.5" Margin="0,2,0,0"
+                                               TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock x:Name="SourceText" FontSize="11" Margin="0,4,0,0"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2" VerticalAlignment="Top" HorizontalAlignment="Right">
+                                    <TextBlock x:Name="ExpTime" Foreground="White" FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Right"/>
+                                    <TextBlock x:Name="ExpDate" Foreground="#99FFFFFF" FontSize="10.5" HorizontalAlignment="Right"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid x:Name="ProgressRow" Grid.Row="1" Margin="0,10,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="38"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="38"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="PosText" Foreground="#99FFFFFF" FontSize="10.5" VerticalAlignment="Center"/>
+                                <Grid x:Name="ProgressTrack" Grid.Column="1" Height="16" VerticalAlignment="Center"
+                                      Background="Transparent" Cursor="Hand" ToolTip="Kliknutím přeskočíš">
+                                    <Border Background="#33FFFFFF" CornerRadius="2" Height="4" VerticalAlignment="Center"/>
+                                    <Border x:Name="ProgressFill" HorizontalAlignment="Left" Width="0" CornerRadius="2"
+                                            Height="4" VerticalAlignment="Center"/>
+                                </Grid>
+                                <TextBlock x:Name="DurText" Grid.Column="2" Foreground="#99FFFFFF" FontSize="10.5"
+                                           HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            </Grid>
+
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,2,0,0">
+                                <Button x:Name="PrevBtn" Style="{StaticResource IconButton}" Width="38" Height="38"
+                                        FontSize="16" Content="&#xE892;" ToolTip="Předchozí"/>
+                                <Button x:Name="PlayBtn" Style="{StaticResource IconButton}" Width="44" Height="44"
+                                        FontSize="22" Margin="14,0" Content="&#xE768;" ToolTip="Přehrát / pauza"/>
+                                <Button x:Name="NextBtn" Style="{StaticResource IconButton}" Width="38" Height="38"
+                                        FontSize="16" Content="&#xE893;" ToolTip="Další"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- NIC NEHRAJE -->
+                        <StackPanel x:Name="PageIdle" VerticalAlignment="Center" HorizontalAlignment="Center" Visibility="Collapsed">
+                            <TextBlock x:Name="IdleTime" Foreground="White" FontSize="38" FontWeight="Light"
+                                       FontFamily="Segoe UI Variable Display, Segoe UI" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="IdleDate" Foreground="#B3FFFFFF" FontSize="13" HorizontalAlignment="Center"/>
+                            <TextBlock x:Name="IdleInfo" Text="Nic nehraje" Foreground="#66FFFFFF" FontSize="11"
+                                       Margin="0,4,0,0" HorizontalAlignment="Center"/>
+                        </StackPanel>
+
+                        <!-- SYSTÉM -->
+                        <Grid x:Name="PageSystem" Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <UniformGrid Rows="2" Columns="2">
+                            <Border Style="{StaticResource Tile}">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource TileLabel}" Text="CPU"/>
+                                    <TextBlock x:Name="CpuValue" Style="{StaticResource TileValue}" Text="—"/>
+                                    <TextBlock x:Name="CpuSub" Style="{StaticResource TileSub}"/>
+                                    <Grid Style="{StaticResource BarTrack}"><Border x:Name="CpuBar" Style="{StaticResource BarFill}"/></Grid>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Tile}">
+                                <StackPanel>
+                                    <TextBlock x:Name="GpuLabel" Style="{StaticResource TileLabel}" Text="GPU"/>
+                                    <TextBlock x:Name="GpuValue" Style="{StaticResource TileValue}" Text="—"/>
+                                    <TextBlock x:Name="GpuSub" Style="{StaticResource TileSub}"/>
+                                    <Grid Style="{StaticResource BarTrack}"><Border x:Name="GpuBar" Style="{StaticResource BarFill}"/></Grid>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Tile}">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource TileLabel}" Text="RAM"/>
+                                    <TextBlock x:Name="RamValue" Style="{StaticResource TileValue}" Text="—"/>
+                                    <TextBlock x:Name="RamSub" Style="{StaticResource TileSub}"/>
+                                    <Grid Style="{StaticResource BarTrack}"><Border x:Name="RamBar" Style="{StaticResource BarFill}"/></Grid>
+                                </StackPanel>
+                            </Border>
+                            <Border Style="{StaticResource Tile}">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource TileLabel}" Text="SÍŤ"/>
+                                    <TextBlock x:Name="NetDown" Style="{StaticResource TileValue}" Text="—"/>
+                                    <TextBlock x:Name="NetUp" Style="{StaticResource TileSub}"/>
+                                </StackPanel>
+                            </Border>
+                        </UniformGrid>
+                        <WrapPanel x:Name="BatteryPanel" Grid.Row="1" Margin="6,3,0,0" Visibility="Collapsed"/>
+                        </Grid>
+
+                        <!-- WIDGETY -->
+                        <Grid x:Name="PageWidgets" Visibility="Collapsed">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Style="{StaticResource Tile}" Grid.Row="0" Grid.Column="0">
+                                <StackPanel>
+                                    <TextBlock Style="{StaticResource TileLabel}" Text="SMĚNA DNES"/>
+                                    <TextBlock x:Name="ShiftToday" Style="{StaticResource TileValue}" Text="—"/>
+                                    <TextBlock x:Name="ShiftNext" Style="{StaticResource TileSub}"/>
+                                    <TextBlock x:Name="ShiftCountdown" FontSize="10.5" FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Style="{StaticResource Tile}" Grid.Row="1" Grid.Column="0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <DockPanel>
+                                        <TextBlock Style="{StaticResource TileLabel}" Text="ČASOVAČ" VerticalAlignment="Center"/>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                            <Button x:Name="TimerPlus1" Style="{StaticResource ChipButton}" Content="+1"/>
+                                            <Button x:Name="TimerPlus5" Style="{StaticResource ChipButton}" Content="+5"/>
+                                        </StackPanel>
+                                    </DockPanel>
+                                    <DockPanel Grid.Row="1" VerticalAlignment="Center">
+                                        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right" VerticalAlignment="Center">
+                                            <Button x:Name="TimerPlay" Style="{StaticResource IconButton}" Width="28" Height="28"
+                                                    FontSize="13" Content="&#xE768;" ToolTip="Spustit / pauza"/>
+                                            <Button x:Name="TimerReset" Style="{StaticResource IconButton}" Width="28" Height="28"
+                                                    FontSize="13" Content="&#xE72C;" ToolTip="Vynulovat"/>
+                                        </StackPanel>
+                                        <TextBlock x:Name="TimerText" Style="{StaticResource TileValue}" Text="00:00"/>
+                                    </DockPanel>
+                                </Grid>
+                            </Border>
+
+                            <Border Style="{StaticResource Tile}" Grid.Row="0" Grid.RowSpan="2" Grid.Column="1">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Style="{StaticResource TileLabel}" Text="POZNÁMKY"/>
+                                    <TextBlock x:Name="NotesPlaceholder" Grid.Row="1" Text="Klikni a piš…" Foreground="#55FFFFFF"
+                                               FontSize="12" Margin="2,4,0,0" IsHitTestVisible="False"/>
+                                    <TextBox x:Name="NotesBox" Grid.Row="1" Background="Transparent" BorderThickness="0"
+                                             Foreground="White" CaretBrush="White" FontSize="12" Margin="0,3,0,0"
+                                             AcceptsReturn="True" TextWrapping="Wrap"
+                                             VerticalScrollBarVisibility="Auto" SelectionBrush="#668C9CFF"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
+
+                        <!-- POČASÍ -->
+                        <Grid x:Name="PageWeather" Visibility="Collapsed">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel VerticalAlignment="Center" Margin="4,0,8,0">
+                                <TextBlock x:Name="WPlace" Style="{StaticResource TileLabel}" Text="POČASÍ"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock x:Name="WIcon" FontFamily="Segoe UI Emoji, Segoe UI Symbol" FontSize="32"
+                                               Foreground="White" VerticalAlignment="Center"/>
+                                    <TextBlock x:Name="WTemp" FontSize="40" FontWeight="Light" Foreground="White"
+                                               Margin="8,0,0,0" FontFamily="Segoe UI Variable Display, Segoe UI"/>
+                                </StackPanel>
+                                <TextBlock x:Name="WDesc" Foreground="White" FontSize="13" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="WDetail" Style="{StaticResource TileSub}" Margin="0,2,0,0"/>
+                                <TextBlock x:Name="WRain" FontSize="11" FontWeight="SemiBold" Margin="0,4,0,0"
+                                           TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                            <StackPanel x:Name="WDays" Grid.Column="1" VerticalAlignment="Center" Width="170"/>
+                        </Grid>
+
+                        <!-- NÁSTROJE -->
+                        <Grid x:Name="PageTools" Visibility="Collapsed">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border x:Name="LaunchBar" Style="{StaticResource Tile}" Padding="8,4" MinHeight="44">
+                                <DockPanel>
+                                    <TextBlock Style="{StaticResource TileLabel}" Text="SPOUŠTĚNÍ" VerticalAlignment="Center"
+                                               Margin="0,0,8,0" DockPanel.Dock="Left"/>
+                                    <StackPanel x:Name="LaunchItems" Orientation="Horizontal" DockPanel.Dock="Left" Tag="nodrag"/>
+                                    <TextBlock x:Name="LaunchHint" Text="přetáhni sem appku nebo zástupce" Foreground="#55FFFFFF"
+                                               FontSize="11" VerticalAlignment="Center" Margin="4,0,0,0"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </DockPanel>
+                            </Border>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Border Style="{StaticResource Tile}">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Style="{StaticResource TileLabel}" Text="PŘIHRÁDKA"/>
+                                        <TextBlock x:Name="ShelfHint" Grid.Row="1" Text="přetáhni soubory na ostrůvek"
+                                                   Foreground="#55FFFFFF" FontSize="11" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" Margin="0,3,0,0">
+                                            <StackPanel x:Name="ShelfItems" Tag="nodrag"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Border>
+                                <Border Style="{StaticResource Tile}" Grid.Column="1">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock x:Name="ClipLabel" Style="{StaticResource TileLabel}" Text="SCHRÁNKA"/>
+                                        <TextBlock x:Name="ClipHint" Grid.Row="1" Text="zkopírované texty se objeví tady"
+                                                   Foreground="#55FFFFFF" FontSize="11" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Hidden" Margin="0,3,0,0">
+                                            <StackPanel x:Name="ClipItems" Tag="nodrag"/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Border>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+
+                    <!-- přepínač záložek -->
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,4,0,0">
+                        <Button x:Name="TabMusic" Style="{StaticResource TabButton}" Content="&#xE8D6;" ToolTip="Hudba"/>
+                        <Button x:Name="TabSystem" Style="{StaticResource TabButton}" Content="&#xE7F4;" ToolTip="Systém"/>
+                        <Button x:Name="TabWeather" Style="{StaticResource TabButton}" Content="&#xE706;" ToolTip="Počasí"/>
+                        <Button x:Name="TabWidgets" Style="{StaticResource TabButton}" Content="&#xE70B;" ToolTip="Widgety"/>
+                        <Button x:Name="TabTools" Style="{StaticResource TabButton}" Content="&#xE90F;" ToolTip="Nástroje"/>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
